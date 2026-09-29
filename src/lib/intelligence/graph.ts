@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { QUERY_LIMIT_DEFAULT, QUERY_LIMIT_LARGE } from "@/lib/constants";
 
 export type GraphNode = {
   data: {
@@ -26,12 +27,12 @@ export type GraphEdge = {
 
 export async function getGraphData(supabase: SupabaseClient) {
   const [actors, identifiers, observations, infrastructure, sources, relationships] = await Promise.all([
-    supabase.from("actors").select("id, canonical_name, category, confidence").order("canonical_name").limit(500),
-    supabase.from("identifiers").select("id, type, value, actor_id").order("type").limit(1000),
-    supabase.from("observations").select("id, title, observation_type, actor_id, source_id").order("observed_at", { ascending: false }).limit(1000),
-    supabase.from("infrastructure").select("id, type, value, confidence, actor_id").order("type").limit(1000),
-    supabase.from("sources").select("id, name, type").order("name").limit(500),
-    supabase.from("relationships").select("id, source_entity_type, source_entity_id, target_entity_type, target_entity_id, relationship_type, confidence, score, description").order("created_at", { ascending: false }).limit(1000),
+    supabase.from("actors").select("id, canonical_name, category, confidence").order("canonical_name").limit(QUERY_LIMIT_DEFAULT),
+    supabase.from("identifiers").select("id, type, value, actor_id").order("type").limit(QUERY_LIMIT_LARGE),
+    supabase.from("observations").select("id, title, observation_type, actor_id, source_id").order("observed_at", { ascending: false }).limit(QUERY_LIMIT_LARGE),
+    supabase.from("infrastructure").select("id, type, value, confidence, actor_id").order("type").limit(QUERY_LIMIT_LARGE),
+    supabase.from("sources").select("id, name, type").order("name").limit(QUERY_LIMIT_DEFAULT),
+    supabase.from("relationships").select("id, source_entity_type, source_entity_id, target_entity_type, target_entity_id, relationship_type, confidence, score, description").order("created_at", { ascending: false }).limit(QUERY_LIMIT_LARGE),
   ]);
 
   const errors = [actors, identifiers, observations, infrastructure, sources, relationships]

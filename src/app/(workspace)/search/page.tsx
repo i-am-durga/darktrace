@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { SearchView, type SearchEntity } from "@/components/search/search-view";
+import { QUERY_LIMIT_SEARCH } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Global Search" };
 
@@ -11,11 +12,11 @@ export default async function SearchPage() {
   if (!supabase) redirect("/login");
 
   const [actorsRes, identifiersRes, observationsRes, evidenceRes, infraRes] = await Promise.all([
-    supabase.from("actors").select("id, canonical_name, category, description, status, confidence").limit(300),
-    supabase.from("identifiers").select("id, actor_id, type, value, normalized_value").limit(300),
-    supabase.from("observations").select("id, title, content, observation_type, observed_at, actor_id").limit(300),
-    supabase.from("evidence").select("id, description, content, evidence_type, content_hash").limit(300),
-    supabase.from("infrastructure").select("id, type, value, provider, country, asn").limit(300),
+    supabase.from("actors").select("id, canonical_name, category, description, status, confidence").limit(QUERY_LIMIT_SEARCH),
+    supabase.from("identifiers").select("id, actor_id, type, value, normalized_value").limit(QUERY_LIMIT_SEARCH),
+    supabase.from("observations").select("id, title, content, observation_type, observed_at, actor_id").limit(QUERY_LIMIT_SEARCH),
+    supabase.from("evidence").select("id, description, content, evidence_type, content_hash").limit(QUERY_LIMIT_SEARCH),
+    supabase.from("infrastructure").select("id, type, value, provider, country, asn").limit(QUERY_LIMIT_SEARCH),
   ]);
 
   const entities: SearchEntity[] = [];

@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { logout } from "@/app/actions/auth";
+import { DataStreamBackground } from "@/components/layout/data-stream";
+import { PageTransition } from "@/components/layout/page-transition";
 
 const navigation = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -26,8 +28,7 @@ const navigation = [
   { href: "/settings", label: "Settings", icon: Settings2 },
 ];
 
-import { DataStreamBackground } from "@/components/layout/data-stream";
-import { PageTransition } from "@/components/layout/page-transition";
+
 
 export function WorkspaceShell({ children, email }: { children: ReactNode; email: string }) {
   const pathname = usePathname();

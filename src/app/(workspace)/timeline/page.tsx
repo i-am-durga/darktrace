@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Clock3 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { TimelineView, type TimelineEvent } from "@/components/timeline/timeline-view";
+import { QUERY_LIMIT_TIMELINE } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Timeline Analysis" };
 
@@ -24,7 +25,7 @@ export default async function TimelinePage() {
       sources ( name )
     `)
     .order("observed_at", { ascending: false })
-    .limit(500);
+    .limit(QUERY_LIMIT_TIMELINE);
 
   if (error) console.error("Timeline query failed", error);
 

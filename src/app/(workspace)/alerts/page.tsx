@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { ShieldAlert } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { AlertsView, type AlertItem } from "@/components/alerts/alerts-view";
+import { QUERY_LIMIT_ALERTS } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Alerts Triage" };
 
@@ -24,7 +25,7 @@ export default async function AlertsPage() {
       actors ( canonical_name )
     `)
     .order("created_at", { ascending: false })
-    .limit(200);
+    .limit(QUERY_LIMIT_ALERTS);
 
   if (error) console.error("Alerts query failed", error);
 

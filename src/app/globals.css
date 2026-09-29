@@ -55,6 +55,15 @@ a { color: inherit; text-decoration: none; }
 .auth-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 22px; color: var(--text-muted); font-size: 12px; }
 .auth-links a:hover { color: var(--accent-strong); }
 
+/* OAuth / Google Sign-In Section */
+.oauth-section { margin-top: 16px; }
+.oauth-divider { display: flex; align-items: center; margin: 16px 0; color: #61756e; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+.oauth-divider span { padding: 0 12px; }
+.oauth-divider-line { flex: 1; height: 1px; background: #1f2e29; }
+.google-auth-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 11px 16px; background: #151e1b; border: 1px solid #273832; border-radius: 6px; color: #e2ece8; font-size: 13px; font-weight: 600; cursor: pointer; }
+.google-auth-btn:hover:not(:disabled) { background: #1a2723; border-color: #34524a; transform: translateY(-1px); }
+.google-auth-btn:disabled { cursor: not-allowed; opacity: .7; }
+
 
 .workspace { min-height: 100vh; background: var(--background); }
 .sidebar { position: fixed; inset: 0 auto 0 0; z-index: 5; display: flex; width: 236px; flex-direction: column; border-right: 1px solid var(--border); background: #131818; }
@@ -198,6 +207,12 @@ a { color: inherit; text-decoration: none; }
 .ingestion-boundary > svg { flex: 0 0 auto; color: var(--warning); }
 .ingestion-boundary strong { display: block; margin-bottom: 6px; color: #ead9b2; font-size: 11px; }
 .ingestion-boundary p { margin: 0; color: #ad9f81; font-size: 10px; line-height: 1.65; }
+.ingestion-panel-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.demo-seed-btn { padding: 7px 14px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; background: #192823; border: 1px solid #284439; color: #a4ebd3; }
+.demo-seed-btn:hover:not(:disabled) { background: #1e3229; border-color: #34654b; }
+.sample-links-row { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+.sample-link { display: inline-flex; align-items: center; gap: 4px; }
+.sample-link-separator { color: #45534f; }
 .phase-empty { display: grid; min-height: 340px; place-items: center; border: 1px dashed #394441; border-radius: 6px; color: var(--text-muted); background: #141919; text-align: center; }
 .phase-empty > div { max-width: 380px; padding: 28px; }
 .phase-empty svg { margin-bottom: 12px; color: var(--accent); }
@@ -305,6 +320,19 @@ a { color: inherit; text-decoration: none; }
 .case-title { font-size: 14px; font-weight: 600; color: #e1e9e5; margin: 0; }
 .case-description { color: #9aa8a2; font-size: 12px; line-height: 1.55; margin: 6px 0 16px; flex-grow: 1; }
 .case-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 12px; border-top: 1px solid #202725; font-size: 11px; color: #7c8a84; }
+.investigations-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+.investigations-tabs { margin-bottom: 0; border-bottom: 0; padding-bottom: 0; }
+.investigations-new-btn { width: auto !important; min-height: 36px !important; padding: 0 14px !important; margin-top: 0 !important; }
+.case-meta-entities { display: inline-flex; align-items: center; gap: 5px; }
+.case-meta-date { font-size: 10px; }
+.case-card-footer { margin-top: 10px; display: flex; justify-content: flex-end; }
+.case-explore-link { display: inline-flex; align-items: center; gap: 4px; }
+.investigation-form { display: grid; gap: 14px; }
+.investigation-textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: #141919; color: var(--text); font-size: 12px; font-family: inherit; }
+.investigation-select { height: 40px; padding: 0 12px; border-radius: 6px; border: 1px solid var(--border); background: #141919; color: var(--text); font-size: 12px; }
+.investigation-modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+.investigation-cancel-btn { width: auto !important; min-height: 38px !important; background: #202a28 !important; color: #c1cfc9 !important; border: 1px solid #334440 !important; }
+.investigation-submit-btn { width: auto !important; min-height: 38px !important; padding: 0 20px !important; }
 
 /* Similarity Score Bar */
 .similarity-bar-wrap { width: 100%; height: 6px; border-radius: 3px; background: #202726; overflow: hidden; margin: 8px 0; }

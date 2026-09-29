@@ -1,9 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { DASHBOARD_LOOKBACK_DAYS, DASHBOARD_RECENT_ACTIVITY_COUNT, QUERY_LIMIT_LARGE } from "@/lib/constants";
 
 const dayInMilliseconds = 24 * 60 * 60 * 1000;
 
 export async function getDashboardOverview(supabase: SupabaseClient) {
-  const since = new Date(Date.now() - 29 * dayInMilliseconds).toISOString();
+  const since = new Date(Date.now() - (DASHBOARD_LOOKBACK_DAYS - 1) * dayInMilliseconds).toISOString();
 
   const [
     actorsResult,
@@ -25,13 +26,13 @@ export async function getDashboardOverview(supabase: SupabaseClient) {
     supabase.from("infrastructure").select("id", { count: "exact", head: true }),
     supabase.from("alerts").select("id", { count: "exact", head: true }).eq("status", "open"),
     supabase.from("investigations").select("id", { count: "exact", head: true }).in("status", ["open", "monitoring"]),
-    supabase.from("actors").select("category").limit(1000),
+    supabase.from("actors").select("category").limit(QUERY_LIMIT_LARGE),
     supabase
       .from("observations")
       .select("id, title, observation_type, observed_at")
       .gte("observed_at", since)
       .order("observed_at", { ascending: true })
-      .limit(1000),
+      .limit(QUERY_LIMIT_LARGE),
   ]);
 
   const errors = [
@@ -64,8 +65,8 @@ export async function getDashboardOverview(supabase: SupabaseClient) {
     observationCounts.set(date, (observationCounts.get(date) ?? 0) + 1);
   }
 
-  const observationActivity = Array.from({ length: 30 }, (_, index) => {
-    const date = new Date(Date.now() - (29 - index) * dayInMilliseconds).toISOString().slice(0, 10);
+  const observationActivity = Array.from({ length: DASHBOARD_LOOKBACK_DAYS }, (_, index) => {
+    const date = new Date(Date.now() - (DASHBOARD_LOOKBACK_DAYS - 1 - index) * dayInMilliseconds).toISOString().slice(0, 10);
     return { date, observations: observationCounts.get(date) ?? 0 };
   });
 
@@ -85,6 +86,6 @@ export async function getDashboardOverview(supabase: SupabaseClient) {
       .map(([category, actors]) => ({ category, actors }))
       .sort((a, b) => b.actors - a.actors),
     observationActivity,
-    recentActivity: (observationsResult.data ?? []).slice(-8).reverse(),
+    recentActivity: (observationsResult.data ?? []).slice(-DASHBOARD_RECENT_ACTIVITY_COUNT).reverse(),
   };
 }

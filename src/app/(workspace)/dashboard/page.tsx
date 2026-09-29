@@ -4,7 +4,10 @@ import {
   Activity, AlertTriangle, ArrowUpRight, Fingerprint, GitBranch,
   Globe2, Radio, Users,
 } from "lucide-react";
+import { AnimatedCounter } from "@/components/dashboard/animated-counter";
 import { DashboardCharts } from "@/components/dashboard/dashboard-charts";
+import { RadarSweep } from "@/components/dashboard/radar-sweep";
+import { TerminalTelemetry } from "@/components/dashboard/terminal-telemetry";
 import { getDashboardOverview } from "@/lib/dashboard/overview";
 import { createClient } from "@/lib/supabase/server";
 
@@ -21,9 +24,7 @@ const metrics = [
   { key: "investigations", label: "Active investigations", icon: ArrowUpRight },
 ] as const;
 
-import { AnimatedCounter } from "@/components/dashboard/animated-counter";
-import { RadarSweep } from "@/components/dashboard/radar-sweep";
-import { TerminalTelemetry } from "@/components/dashboard/terminal-telemetry";
+
 
 export default async function DashboardPage() {
   const supabase = await createClient();

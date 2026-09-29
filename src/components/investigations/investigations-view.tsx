@@ -39,8 +39,8 @@ export function InvestigationsView({ cases }: { cases: InvestigationItem[] }) {
 
   return (
     <div>
-      <div className="actor-toolbar" style={{ justifyContent: "space-between", marginBottom: 16 }}>
-        <div className="filter-tabs" style={{ marginBottom: 0, borderBottom: 0, paddingBottom: 0 }}>
+      <div className="actor-toolbar investigations-toolbar">
+        <div className="filter-tabs investigations-tabs">
           <button
             type="button"
             onClick={() => setFilterStatus("all")}
@@ -74,8 +74,7 @@ export function InvestigationsView({ cases }: { cases: InvestigationItem[] }) {
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className="auth-button"
-          style={{ width: "auto", minHeight: 36, padding: "0 14px", marginTop: 0 }}
+          className="auth-button investigations-new-btn"
         >
           <Plus size={14} aria-hidden="true" /> New Investigation
         </button>
@@ -105,15 +104,15 @@ export function InvestigationsView({ cases }: { cases: InvestigationItem[] }) {
 
               <div>
                 <div className="case-meta">
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                  <span className="case-meta-entities">
                     <Users size={12} /> {item.entity_count} linked entities
                   </span>
-                  <time dateTime={item.created_at} style={{ fontSize: 10 }}>
+                  <time dateTime={item.created_at} className="case-meta-date">
                     {new Date(item.created_at).toLocaleDateString()}
                   </time>
                 </div>
-                <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end" }}>
-                  <Link href={`/graph?focus=${item.id}`} className="table-action" style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+                <div className="case-card-footer">
+                  <Link href={`/graph?focus=${item.id}`} className="table-action case-explore-link">
                     Explore Entities <ArrowUpRight size={12} />
                   </Link>
                 </div>
@@ -138,7 +137,7 @@ export function InvestigationsView({ cases }: { cases: InvestigationItem[] }) {
                 await formAction(formData);
                 setIsModalOpen(false);
               }}
-              style={{ display: "grid", gap: 14 }}
+              className="investigation-form"
             >
               <div className="field">
                 <label htmlFor="case-name">Investigation Case Name</label>
@@ -158,15 +157,7 @@ export function InvestigationsView({ cases }: { cases: InvestigationItem[] }) {
                   name="description"
                   rows={3}
                   placeholder="Describe scope, passive indicators, and expected review checkpoints…"
-                  style={{
-                    width: "100%",
-                    padding: 10,
-                    borderRadius: 6,
-                    border: "1px solid var(--border)",
-                    background: "#141919",
-                    color: "var(--text)",
-                    fontSize: 12,
-                  }}
+                  className="investigation-textarea"
                 />
               </div>
 
@@ -176,15 +167,7 @@ export function InvestigationsView({ cases }: { cases: InvestigationItem[] }) {
                   id="case-status"
                   name="status"
                   defaultValue="open"
-                  style={{
-                    height: 40,
-                    padding: "0 12px",
-                    borderRadius: 6,
-                    border: "1px solid var(--border)",
-                    background: "#141919",
-                    color: "var(--text)",
-                    fontSize: 12,
-                  }}
+                  className="investigation-select"
                 >
                   <option value="open">Open (Active Investigation)</option>
                   <option value="monitoring">Monitoring (Passive Review)</option>
@@ -192,20 +175,18 @@ export function InvestigationsView({ cases }: { cases: InvestigationItem[] }) {
                 </select>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 8 }}>
+              <div className="investigation-modal-actions">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="auth-button"
-                  style={{ width: "auto", minHeight: 38, background: "#202a28", color: "#c1cfc9", border: "1px solid #334440" }}
+                  className="auth-button investigation-cancel-btn"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={pending}
-                  className="auth-button"
-                  style={{ width: "auto", minHeight: 38, padding: "0 20px" }}
+                  className="auth-button investigation-submit-btn"
                 >
                   {pending ? "Creating case…" : "Create Case"}
                 </button>

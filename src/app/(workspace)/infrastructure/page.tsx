@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Globe2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { InfrastructureView, type InfraRecord } from "@/components/infrastructure/infrastructure-view";
+import { QUERY_LIMIT_INFRASTRUCTURE } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Infrastructure Intelligence" };
 
@@ -27,7 +28,7 @@ export default async function InfrastructurePage() {
       actors ( canonical_name )
     `)
     .order("created_at", { ascending: false })
-    .limit(500);
+    .limit(QUERY_LIMIT_INFRASTRUCTURE);
 
   if (error) console.error("Infrastructure query failed", error);
 

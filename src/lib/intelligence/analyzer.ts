@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { QUERY_LIMIT_SMALL, QUERY_LIMIT_EVIDENCE, ANALYSIS_ALERT_BATCH_SIZE, SIMILARITY_THRESHOLD } from "@/lib/constants";
 
 export type AnalysisRunResult = {
   success: boolean;
@@ -12,10 +13,10 @@ export async function runIntelligenceAnalysis(supabase: SupabaseClient): Promise
   try {
     // 1. Fetch current actors, observations, identifiers, infrastructure
     const [actorsRes, obsRes, infraRes, idRes] = await Promise.all([
-      supabase.from("actors").select("id, canonical_name, category, status, confidence").limit(200),
-      supabase.from("observations").select("id, title, content, observation_type, actor_id, observed_at").limit(300),
-      supabase.from("infrastructure").select("id, type, value, provider, asn, actor_id").limit(200),
-      supabase.from("identifiers").select("id, type, value, actor_id").limit(200),
+      supabase.from("actors").select("id, canonical_name, category, status, confidence").limit(QUERY_LIMIT_SMALL),
+      supabase.from("observations").select("id, title, content, observation_type, actor_id, observed_at").limit(QUERY_LIMIT_EVIDENCE),
+      supabase.from("infrastructure").select("id, type, value, provider, asn, actor_id").limit(QUERY_LIMIT_SMALL),
+      supabase.from("identifiers").select("id, type, value, actor_id").limit(QUERY_LIMIT_SMALL),
     ]);
 
     const actors = actorsRes.data ?? [];
@@ -164,7 +165,7 @@ export async function runIntelligenceAnalysis(supabase: SupabaseClient): Promise
         const isSameCategory = a1.category === a2.category && a1.category !== "unknown";
         const sim = stringSimilarity(a1.canonical_name, a2.canonical_name);
 
-        if (isSameCategory || sim > 0.4) {
+        if (isSameCategory || sim > SIMILARITY_THRESHOLD) {
           const score = isSameCategory && sim > 0.4 ? 0.85 : isSameCategory ? 0.72 : 0.64;
           const relType = isSameCategory ? "behavioral_similarity" : "linguistic_similarity";
           const desc = isSameCategory
@@ -188,7 +189,7 @@ export async function runIntelligenceAnalysis(supabase: SupabaseClient): Promise
     }
 
     // 4. Generate triage alerts for newly discovered high-confidence correlations
-    for (const actor of actors.slice(0, 5)) {
+    for (const actor of actors.slice(0, ANALYSIS_ALERT_BATCH_SIZE)) {
       const { error: alertError } = await supabase.from("alerts").insert({
         actor_id: actor.id,
         type: "high_confidence_match",

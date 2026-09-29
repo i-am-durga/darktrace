@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { authRateLimiter } from "@/lib/rate-limit";
 
 export type AuthState = {
   message?: string;
@@ -58,11 +59,25 @@ export async function login(_state: AuthState, formData: FormData): Promise<Auth
   });
   if (!parsed.success) return validationError(parsed.error);
 
+  // Rate limit protection against brute force credential stuffing
+  const rateKey = `login:${parsed.data.email.toLowerCase()}`;
+  const limitCheck = authRateLimiter.check(rateKey);
+  if (!limitCheck.success) {
+    const waitSec = Math.ceil(limitCheck.resetMs / 1000);
+    return {
+      message: `Too many sign-in attempts. Please wait ${waitSec} seconds before trying again.`,
+      error: true,
+    };
+  }
+
   const supabase = await createClient();
   if (!supabase) return missingConfig();
 
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
   if (error) return { message: "Unable to sign in with those credentials.", error: true };
+
+  // Clear failed attempt record on successful authentication
+  authRateLimiter.reset(rateKey);
 
   redirect("/dashboard");
 }
@@ -79,6 +94,12 @@ export async function register(_state: AuthState, formData: FormData): Promise<A
   });
   if (!parsed.success) return validationError(parsed.error);
 
+  const rateKey = `register:${parsed.data.email.toLowerCase()}`;
+  const limitCheck = authRateLimiter.check(rateKey);
+  if (!limitCheck.success) {
+    return { message: "Too many registration attempts. Please wait a minute before trying again.", error: true };
+  }
+
   const supabase = await createClient();
   if (!supabase) return missingConfig();
 
@@ -93,16 +114,21 @@ export async function register(_state: AuthState, formData: FormData): Promise<A
     },
   });
 
-  if (error) return { message: error.message || "Unable to create the account. Check the details and try again.", error: true };
+  if (error) {
+    // Log for debugging but never leak raw Supabase error messages to the client
+    console.error("Registration error", { code: error.code });
+    return { message: "Unable to create the account. Check the details and try again.", error: true };
+  }
 
   // If Supabase has "Confirm email" disabled, a session is created immediately
   if (data?.session) {
     redirect("/dashboard");
   }
 
-  // Supabase returns an empty identities array if the email already exists
+  // Supabase returns an empty identities array if the email already exists.
+  // Return the same success message to prevent user enumeration attacks.
   if (data?.user?.identities && data.user.identities.length === 0) {
-    return { message: "An account with this email already exists. Please go to the sign-in page.", error: true };
+    return { message: "If this email is not yet registered, a confirmation link has been sent. Check your inbox or spam folder." };
   }
 
   return { message: "Account created! If email confirmation is enabled on your Supabase project, check your inbox (or spam folder) to confirm your address." };
@@ -114,6 +140,12 @@ export async function requestPasswordReset(
 ): Promise<AuthState> {
   const parsed = z.email().trim().safeParse(getField(formData, "email"));
   if (!parsed.success) return { message: "Enter a valid email address.", error: true };
+
+  const rateKey = `reset:${parsed.data.toLowerCase()}`;
+  const limitCheck = authRateLimiter.check(rateKey);
+  if (!limitCheck.success) {
+    return { message: "Too many reset requests. Please wait a minute before requesting another link.", error: true };
+  }
 
   const supabase = await createClient();
   if (!supabase) return missingConfig();

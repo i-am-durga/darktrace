@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { ChartNoAxesCombined } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { AnalysisView, type AnalysisItem } from "@/components/analysis/analysis-view";
+import { QUERY_LIMIT_ANALYSIS } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Similarity & Correlation Analysis" };
 
@@ -24,7 +25,7 @@ export default async function AnalysisPage() {
       actors ( canonical_name )
     `)
     .order("created_at", { ascending: false })
-    .limit(100);
+    .limit(QUERY_LIMIT_ANALYSIS);
 
   if (error) console.error("Analysis results query failed", error);
 

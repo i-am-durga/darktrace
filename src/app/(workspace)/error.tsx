@@ -29,12 +29,12 @@ export default function WorkspaceError({
           <strong>Intelligence module error</strong>
           <p>{error.message || "An unexpected error occurred while communicating with the database or rendering views."}</p>
           {error.digest && (
-            <p className="mono-value" style={{ marginTop: 8, opacity: 0.8 }}>
+            <p className="mono-value error-digest-ref">
               Ref: {error.digest}
             </p>
           )}
-          <div style={{ marginTop: 14 }}>
-            <button onClick={() => reset()} className="auth-button" style={{ width: "auto", padding: "8px 18px", minHeight: 36 }}>
+          <div className="error-retry-wrap">
+            <button onClick={() => reset()} className="auth-button error-retry-btn" type="button">
               <RotateCcw size={14} aria-hidden="true" />
               Retry module
             </button>

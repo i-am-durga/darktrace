@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Activity } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { ReportsView, type ReportData } from "@/components/reports/reports-view";
+import { QUERY_LIMIT_REPORTS } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Intelligence Reports" };
 
@@ -11,7 +12,7 @@ export default async function ReportsPage() {
   if (!supabase) redirect("/login");
 
   const [actorsRes, obsRes, evRes, infraRes, alertsRes] = await Promise.all([
-    supabase.from("actors").select("id, canonical_name, category, status, confidence").limit(100),
+    supabase.from("actors").select("id, canonical_name, category, status, confidence").limit(QUERY_LIMIT_REPORTS),
     supabase.from("observations").select("title, observation_type, observed_at").order("observed_at", { ascending: false }).limit(6),
     supabase.from("evidence").select("id", { count: "exact", head: true }),
     supabase.from("infrastructure").select("value, type, provider").limit(50),

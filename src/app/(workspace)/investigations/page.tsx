@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { FolderKanban } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { InvestigationsView, type InvestigationItem } from "@/components/investigations/investigations-view";
+import { QUERY_LIMIT_INVESTIGATIONS, QUERY_LIMIT_LARGE } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Investigations Desk" };
 
@@ -15,11 +16,11 @@ export default async function InvestigationsPage() {
       .from("investigations")
       .select("id, name, description, status, created_at, updated_at")
       .order("created_at", { ascending: false })
-      .limit(100),
+      .limit(QUERY_LIMIT_INVESTIGATIONS),
     supabase
       .from("investigation_entities")
       .select("investigation_id")
-      .limit(1000),
+      .limit(QUERY_LIMIT_LARGE),
   ]);
 
   if (invRes.error) console.error("Investigations query failed", invRes.error);

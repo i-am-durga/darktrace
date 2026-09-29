@@ -3,6 +3,7 @@ import { AlertTriangle, Users } from "lucide-react";
 import { redirect } from "next/navigation";
 import { ActorDirectory } from "@/components/actors/actor-directory";
 import { createClient } from "@/lib/supabase/server";
+import { QUERY_LIMIT_LARGE } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Actors" };
 
@@ -14,7 +15,7 @@ export default async function ActorsPage() {
     .from("actors")
     .select("id, canonical_name, category, status, confidence, first_seen, last_seen")
     .order("canonical_name")
-    .limit(1000);
+    .limit(QUERY_LIMIT_LARGE);
 
   if (error) console.error("Actor directory query failed", { code: error.code });
 

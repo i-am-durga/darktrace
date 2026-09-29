@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { FileCheck2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { EvidenceView, type EvidenceItem } from "@/components/evidence/evidence-view";
+import { QUERY_LIMIT_EVIDENCE } from "@/lib/constants";
 
 export const metadata: Metadata = { title: "Evidence Vault" };
 
@@ -24,7 +25,7 @@ export default async function EvidencePage() {
       observations ( title )
     `)
     .order("captured_at", { ascending: false })
-    .limit(300);
+    .limit(QUERY_LIMIT_EVIDENCE);
 
   if (error) console.error("Evidence query failed", error);
 

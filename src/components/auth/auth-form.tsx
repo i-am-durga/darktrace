@@ -113,33 +113,18 @@ export function AuthForm({ mode, action }: { mode: AuthMode; action: AuthAction 
       </form>
 
       {(mode === "login" || mode === "register") && (
-        <div style={{ marginTop: "16px" }}>
-          <div style={{ display: "flex", alignItems: "center", margin: "16px 0", color: "#61756e", fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px" }}>
-            <div style={{ flex: 1, height: "1px", background: "#1f2e29" }} />
-            <span style={{ padding: "0 12px" }}>or</span>
-            <div style={{ flex: 1, height: "1px", background: "#1f2e29" }} />
+        <div className="oauth-section">
+          <div className="oauth-divider">
+            <div className="oauth-divider-line" />
+            <span>or</span>
+            <div className="oauth-divider-line" />
           </div>
 
           <button
             type="button"
             onClick={handleGoogleSignIn}
             disabled={googleLoading || pending}
-            className="auth-button"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              width: "100%",
-              padding: "11px 16px",
-              background: "#151e1b",
-              border: "1px solid #273832",
-              borderRadius: "6px",
-              color: "#e2ece8",
-              fontSize: "13px",
-              fontWeight: "600",
-              cursor: googleLoading ? "not-allowed" : "pointer",
-            }}
+            className="auth-button google-auth-btn"
             id="btn-google-auth"
           >
             {googleLoading ? (
