@@ -1,0 +1,78 @@
+{
+  "actors": [
+    {
+      "canonical_name": "ApexRansom",
+      "category": "ransomware",
+      "description": "Double-extortion ransomware demonstration cluster monitored for defense research.",
+      "status": "active",
+      "confidence": "high"
+    },
+    {
+      "canonical_name": "VelvetHydra",
+      "category": "malware",
+      "description": "Modular infostealer malware campaign observed distributing malicious loaders.",
+      "status": "monitoring",
+      "confidence": "medium"
+    },
+    {
+      "canonical_name": "IronBastion",
+      "category": "infrastructure",
+      "description": "Fast-flux DNS proxy provider facilitating malicious command-and-control shielding.",
+      "status": "active",
+      "confidence": "medium"
+    }
+  ],
+  "observations": [
+    {
+      "actor_name": "ApexRansom",
+      "source": {
+        "name": "Defensive Telemetry Network",
+        "type": "public_dataset",
+        "url": "https://telemetry.defense.example/report/apex",
+        "trust_level": "high"
+      },
+      "title": "ApexRansom leak portal announcement",
+      "content": "Observed publication of corporate victim claim on Tor demonstration mirror.",
+      "observation_type": "post",
+      "observed_at": "2026-09-24T18:00:00Z"
+    },
+    {
+      "actor_name": "VelvetHydra",
+      "source": {
+        "name": "Malware Analysis Sandbox",
+        "type": "analyst_input",
+        "url": "https://sandbox.security.example/analysis/vh-401",
+        "trust_level": "high"
+      },
+      "title": "VelvetHydra payload extraction",
+      "content": "Static disassembly revealed C2 heartbeat interval and hardcoded fallback domains.",
+      "observation_type": "infrastructure",
+      "observed_at": "2026-09-25T14:30:00Z"
+    },
+    {
+      "actor_name": "IronBastion",
+      "source": {
+        "name": "Global BGP Monitor",
+        "type": "clearnet",
+        "url": "https://bgp.network.example/as/49210",
+        "trust_level": "medium"
+      },
+      "title": "IronBastion prefix announcement shift",
+      "content": "Observed sudden route flapping across offshore hosting autonomous system.",
+      "observation_type": "infrastructure",
+      "observed_at": "2026-09-26T21:15:00Z"
+    },
+    {
+      "actor_name": "ApexRansom",
+      "source": {
+        "name": "Analyst Notebook",
+        "type": "analyst_input",
+        "trust_level": "medium"
+      },
+      "title": "Analyst hypothesis on affiliate crossover",
+      "content": "Candidate stylometric overlap identified between ApexRansom negotiation note and historical forum messages.",
+      "observation_type": "analyst_note",
+      "observed_at": "2026-09-27T09:00:00Z"
+    }
+  ]
+}
