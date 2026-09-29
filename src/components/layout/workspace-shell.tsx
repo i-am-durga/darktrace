@@ -26,6 +26,9 @@ const navigation = [
   { href: "/settings", label: "Settings", icon: Settings2 },
 ];
 
+import { DataStreamBackground } from "@/components/layout/data-stream";
+import { PageTransition } from "@/components/layout/page-transition";
+
 export function WorkspaceShell({ children, email }: { children: ReactNode; email: string }) {
   const pathname = usePathname();
   const active = navigation.find((item) => item.href === pathname || pathname.startsWith(`${item.href}/`));
@@ -33,6 +36,7 @@ export function WorkspaceShell({ children, email }: { children: ReactNode; email
 
   return (
     <div className="workspace">
+      <DataStreamBackground />
       <aside className="sidebar" aria-label="Main navigation">
         <Link href="/dashboard" className="sidebar-brand brand-lockup">
           <span className="brand-mark"><Fingerprint size={19} strokeWidth={1.8} aria-hidden="true" /></span>
@@ -64,12 +68,17 @@ export function WorkspaceShell({ children, email }: { children: ReactNode; email
         <header className="topbar">
           <div className="breadcrumb">Workspace <span aria-hidden="true">/</span> <strong>{active?.label ?? "Intelligence overview"}</strong></div>
           <div className="topbar-meta">
-            <span className="system-status"><span className="status-dot" aria-hidden="true" /> Authenticated analyst</span>
+            <span className="system-status" title="Real-time telemetry status">
+              <span className="threat-dot" aria-hidden="true" />
+              <span className="threat-status-text">SYSTEM OPERATIONAL</span>
+            </span>
             <Link href="/alerts" className="icon-link" aria-label="Notifications" title="Notifications"><Bell size={15} aria-hidden="true" /></Link>
             <a href="mailto:support@darktrace.example" className="icon-link" aria-label="Contact support" title="Contact support"><CircleHelp size={15} aria-hidden="true" /></a>
           </div>
         </header>
-        {children}
+        <PageTransition>
+          {children}
+        </PageTransition>
       </div>
     </div>
   );

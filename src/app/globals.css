@@ -329,3 +329,438 @@ a { color: inherit; text-decoration: none; }
   .stat-value, .case-title, .timeline-title, h1, h2 { color: #000 !important; }
   .page-description, .case-description, .timeline-content, dd, dt, span { color: #333 !important; }
 }
+
+/* ==========================================================================
+   CYBER-DEFENSE ANIMATIONS & TELEMETRY SUITE
+   ========================================================================== */
+
+/* 1. Live Threat Pulse */
+.threat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00e88a;
+  box-shadow: 0 0 10px #00e88a;
+  animation: threatPulse 1.8s ease-in-out infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+@keyframes threatPulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+    box-shadow: 0 0 4px #00e88a;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+    box-shadow: 0 0 14px #00e88a, 0 0 20px rgba(0, 232, 138, 0.4);
+  }
+}
+
+.threat-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border: 1px solid rgba(0, 232, 138, 0.25);
+  border-radius: 100px;
+  background: rgba(0, 232, 138, 0.05);
+}
+
+.threat-status-text {
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #00e88a;
+}
+
+.threat-heading-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+/* 2. Card Hover: Lifts 2-4px and soft glow */
+.card-hover, .stat-panel, .panel, .case-card {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.card-hover:hover, .stat-panel:hover, .case-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 232, 138, 0.35);
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 232, 138, 0.08);
+}
+
+/* 3. Cyber Scanning Line */
+.scan-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-panel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #00e88a 50%, transparent 100%);
+  box-shadow: 0 0 16px #00e88a, 0 0 24px rgba(0, 232, 138, 0.5);
+  opacity: 0.45;
+  animation: scan 3.5s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes scan {
+  from { top: -2px; }
+  to { top: 100%; }
+}
+
+/* 4. Glowing Active Navigation */
+.nav-link {
+  position: relative;
+  transition: all 0.18s ease;
+}
+
+.nav-link.active {
+  color: #00e88a !important;
+  background: linear-gradient(90deg, rgba(0, 232, 138, 0.12) 0%, rgba(0, 232, 138, 0.02) 100%) !important;
+  border-color: rgba(0, 232, 138, 0.3) !important;
+  box-shadow: inset 2px 0 0 #00e88a, 0 0 14px rgba(0, 232, 138, 0.08);
+}
+
+.nav-link.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 3px;
+  background: #00e88a;
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 8px #00e88a;
+}
+
+/* 5. Page Transitions */
+.page-transition {
+  animation: pageFadeSlide 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pageFadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 6. Data Stream Canvas Background */
+.data-stream-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+}
+
+/* 7. Threat Activity Timeline Rows */
+.activity-row {
+  animation: threatRowSlide 0.35s ease-out backwards;
+}
+
+@keyframes threatRowSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 8. Telemetry Grid (Radar + Terminal) */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 960px) {
+  .telemetry-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 9. Perimeter Threat Radar */
+.radar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #121716;
+  min-height: 290px;
+}
+
+.radar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.radar-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.radar-title {
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #c9d5d0;
+}
+
+.radar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 10px;
+  color: #00e88a;
+  background: rgba(0, 232, 138, 0.08);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 232, 138, 0.2);
+}
+
+.radar-badge-icon {
+  animation: threatPulse 1.4s infinite;
+}
+
+.radar-display {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin: 6px auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 232, 138, 0.06) 0%, rgba(16, 21, 20, 0.9) 70%);
+  border: 1px solid rgba(0, 232, 138, 0.35);
+  box-shadow: 0 0 20px rgba(0, 232, 138, 0.06), inset 0 0 20px rgba(0, 232, 138, 0.04);
+  overflow: hidden;
+}
+
+.radar-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(0, 232, 138, 0.2);
+  pointer-events: none;
+}
+
+.radar-ring-1 { width: 33%; height: 33%; border-style: solid; }
+.radar-ring-2 { width: 66%; height: 66%; }
+.radar-ring-3 { width: 95%; height: 95%; border-color: rgba(0, 232, 138, 0.25); }
+
+.radar-crosshair {
+  position: absolute;
+  background: rgba(0, 232, 138, 0.15);
+  pointer-events: none;
+}
+
+.radar-crosshair-h { top: 50%; left: 0; right: 0; height: 1px; }
+.radar-crosshair-v { left: 50%; top: 0; bottom: 0; width: 1px; }
+.radar-crosshair-d1 { top: 50%; left: 0; right: 0; height: 1px; transform: rotate(45deg); opacity: 0.08; }
+.radar-crosshair-d2 { top: 50%; left: 0; right: 0; height: 1px; transform: rotate(-45deg); opacity: 0.08; }
+
+.radar-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00e88a;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px #00e88a;
+}
+
+.radar-sweep-needle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(0, 232, 138, 0.4) 0deg, rgba(0, 232, 138, 0.08) 35deg, transparent 70deg);
+  animation: radarRotate 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes radarRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.radar-blip {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5252;
+  box-shadow: 0 0 8px #ff5252;
+  animation: blipPulse 2.2s infinite;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.radar-blip.blip-1 { top: 28%; left: 68%; }
+.radar-blip.blip-2 { top: 72%; left: 32%; background: #00e88a; box-shadow: 0 0 8px #00e88a; animation-delay: 0.7s; }
+.radar-blip.blip-3 { top: 38%; left: 24%; background: #ffaa00; box-shadow: 0 0 8px #ffaa00; animation-delay: 1.4s; }
+.radar-blip.blip-4 { top: 78%; left: 74%; animation-delay: 1.9s; }
+
+@keyframes blipPulse {
+  0%, 100% { transform: scale(0.9); opacity: 0.4; }
+  50% { transform: scale(1.4); opacity: 1; }
+}
+
+.radar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.radar-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.radar-stat-label {
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 9px;
+  color: #6d7b76;
+}
+
+.radar-stat-value {
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #c9d5d0;
+}
+
+.text-accent {
+  color: #00e88a !important;
+}
+
+/* 10. Cyber Terminal Telemetry Widget */
+.terminal-widget {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #0d1211;
+  min-height: 290px;
+  overflow: hidden;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid #1c2522;
+  background: #111716;
+}
+
+.terminal-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.term-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.term-red { background: #ff5f56; }
+.term-yellow { background: #ffbd2e; }
+.term-green { background: #27c93f; }
+
+.terminal-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 11px;
+  color: #8fa099;
+}
+
+.terminal-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 10px;
+  color: #72847d;
+}
+
+.terminal-body {
+  padding: 14px 16px;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #a4b7af;
+  flex-grow: 1;
+}
+
+.terminal-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.terminal-prompt {
+  color: #00e88a;
+  font-weight: bold;
+}
+
+.terminal-text {
+  color: #c6d5cf;
+}
+
+.text-accent-glow {
+  color: #00e88a;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(0, 232, 138, 0.4);
+}
+
+.terminal-cursor {
+  display: inline-block;
+  color: #00e88a;
+  font-weight: bold;
+  animation: blinkCursor 0.8s step-start infinite;
+  margin-left: 2px;
+}
+
+@keyframes blinkCursor {
+  50% { opacity: 0; }
+}

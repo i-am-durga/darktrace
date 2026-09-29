@@ -21,6 +21,10 @@ const metrics = [
   { key: "investigations", label: "Active investigations", icon: ArrowUpRight },
 ] as const;
 
+import { AnimatedCounter } from "@/components/dashboard/animated-counter";
+import { RadarSweep } from "@/components/dashboard/radar-sweep";
+import { TerminalTelemetry } from "@/components/dashboard/terminal-telemetry";
+
 export default async function DashboardPage() {
   const supabase = await createClient();
   if (!supabase) redirect("/login");
@@ -31,8 +35,15 @@ export default async function DashboardPage() {
   return (
     <main className="content">
       <div className="page-heading">
-        <div><p className="eyebrow">Intelligence overview</p><h1>Dashboard</h1><p className="page-description">A current view of monitored entities and analyst activity.</p></div>
-        <div className="period-label"><Activity size={13} aria-hidden="true" /> Last 30 days</div>
+        <div>
+          <div className="threat-heading-pill">
+            <span className="threat-dot" aria-hidden="true" />
+            <p className="eyebrow">Real-Time Threat Telemetry</p>
+          </div>
+          <h1>Dashboard</h1>
+          <p className="page-description">Live cyber intelligence feeds, actor reconnaissance, and automated perimeter monitoring.</p>
+        </div>
+        <div className="period-label"><Activity size={13} aria-hidden="true" /> Live Monitored (30d)</div>
       </div>
 
       {!connected && (
@@ -42,12 +53,19 @@ export default async function DashboardPage() {
         </section>
       )}
 
+      {/* Cyber Intelligence Telemetry & Perimeter Radar */}
+      <section className="telemetry-grid" aria-label="Live Radar and Telemetry Feed">
+        <RadarSweep activeThreats={connected ? (overview.stats.activeActors || 4) : 4} />
+        <TerminalTelemetry />
+      </section>
+
+      {/* Statistics Cards with Counting Animations */}
       <section className="stats-grid" aria-label="Intelligence statistics">
         {metrics.map(({ key, label, icon: Icon }) => (
-          <article className="stat-panel" key={label}>
+          <article className="stat-panel card-hover" key={label}>
             <div className="stat-topline"><span>{label}</span><Icon className="stat-icon" size={15} aria-hidden="true" /></div>
             <div className="stat-value" aria-label={`${label}: ${connected ? overview.stats[key] : "unavailable"}`}>
-              {connected ? overview.stats[key].toLocaleString() : "—"}
+              {connected ? <AnimatedCounter value={overview.stats[key]} /> : "—"}
             </div>
           </article>
         ))}
@@ -62,14 +80,25 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      <section className="panel activity-panel" aria-labelledby="activity-title">
-        <div className="panel-header"><h2 className="panel-title" id="activity-title">Recent activity</h2><span className="panel-meta">Latest observations</span></div>
+      {/* Activity Panel with Scanning Laser Line */}
+      <section className="panel activity-panel scan-panel card-hover" aria-labelledby="activity-title">
+        <div className="panel-header">
+          <div className="flex items-center gap-2">
+            <span className="threat-dot" aria-hidden="true" />
+            <h2 className="panel-title" id="activity-title">Live Threat Activity Timeline</h2>
+          </div>
+          <span className="panel-meta">Continuous Stream</span>
+        </div>
         {!connected || overview.recentActivity.length === 0 ? (
           <div className="activity-empty"><Activity size={18} aria-hidden="true" /><p>{connected ? "No observations have been recorded yet." : "Recent observations will appear after database access is available."}</p></div>
         ) : (
           <div className="activity-list">
-            {overview.recentActivity.map((event) => (
-              <article className="activity-row" key={event.id}>
+            {overview.recentActivity.map((event, idx) => (
+              <article 
+                className="activity-row" 
+                key={event.id}
+                style={{ animationDelay: `${idx * 0.08}s` }}
+              >
                 <span className="activity-marker" aria-hidden="true" />
                 <div className="activity-detail"><strong>{event.title}</strong><span>{event.observation_type.replaceAll("_", " ")}</span></div>
                 <time dateTime={event.observed_at}>{new Date(event.observed_at).toLocaleString()}</time>
