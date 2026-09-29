@@ -190,3 +190,32 @@ export async function logout() {
   redirect("/login");
 }
 
+export async function signInWithGoogle(): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  if (!supabase) return { error: "Authentication is not configured." };
+
+  const { headers } = await import("next/headers");
+  const headerList = await headers();
+  const forwardedHost = headerList.get("x-forwarded-host");
+  const host = forwardedHost || headerList.get("host") || "darktrace-security.vercel.app";
+  const proto = headerList.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
+  const origin = `${proto}://${host}`;
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  if (data?.url) {
+    redirect(data.url);
+  }
+
+  return {};
+}
+

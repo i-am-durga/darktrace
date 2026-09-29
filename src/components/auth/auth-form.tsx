@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Loader2 } from "lucide-react";
-import type { AuthState } from "@/app/actions/auth";
+import { signInWithGoogle, type AuthState } from "@/app/actions/auth";
 import { createClient } from "@/lib/supabase/client";
 
 type AuthAction = (state: AuthState, formData: FormData) => Promise<AuthState>;
@@ -52,24 +52,16 @@ export function AuthForm({ mode, action }: { mode: AuthMode; action: AuthAction 
     setGoogleLoading(true);
     setOauthError(null);
     try {
-      const supabase = createClient();
-      if (!supabase) {
-        setOauthError("Supabase connection is not available.");
-        setGoogleLoading(false);
-        return;
-      }
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) {
-        setOauthError(error.message);
+      const res = await signInWithGoogle();
+      if (res?.error) {
+        setOauthError(res.error);
         setGoogleLoading(false);
       }
-    } catch {
-      setOauthError("Unable to initiate Google sign-in. Check your browser connection.");
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "digest" in err && String((err as Record<string, unknown>).digest).startsWith("NEXT_REDIRECT")) {
+        throw err;
+      }
+      setOauthError("Unable to initiate Google sign-in. Check your connection.");
       setGoogleLoading(false);
     }
   };
