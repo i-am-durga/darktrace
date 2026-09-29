@@ -31,8 +31,13 @@ export function AuthForm({ mode, action }: { mode: AuthMode; action: AuthAction 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      if (params.get("error") === "oauth_failed") {
-        setOauthError("Google authentication could not be completed. Please try again or check your account settings.");
+      const err = params.get("error");
+      if (err) {
+        if (err === "redirect_not_whitelisted" || err === "oauth_failed") {
+          setOauthError("Google authentication redirect failed. Please verify that https://darktrace-security.vercel.app/** is added to Redirect URLs in your Supabase Dashboard.");
+        } else {
+          setOauthError(decodeURIComponent(err));
+        }
       }
     }
   }, []);
