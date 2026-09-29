@@ -16,9 +16,9 @@ export async function GET() {
       const pingStart = Date.now();
       const { error } = await supabase.from("actors").select("id", { count: "exact", head: true });
       dbLatencyMs = Date.now() - pingStart;
-      dbStatus = error ? `error: ${error.code ?? error.message}` : "connected";
-    } catch (err: unknown) {
-      dbStatus = err instanceof Error ? err.message : "connection_failed";
+      dbStatus = error ? `db_error_${error.code || "unknown"}` : "connected";
+    } catch {
+      dbStatus = "connection_failed";
     }
   }
 
